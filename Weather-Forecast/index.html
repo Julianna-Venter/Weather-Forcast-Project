@@ -5,9 +5,116 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather Forecast</title>
+    <link rel="stylesheet" href="index.scss">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body>
-    <div id="app"></div>
+
+    <div class="container">
+      <div class="navigation-container">
+
+        <nav class="timezones">
+          <button>Current City</button>
+          <button>London</button>
+          <button>Sydney</button>
+          <button>Tokyo</button>
+          <button>Paris</button>
+        </nav>
+
+        <div class="search-container">
+          <search-bar></search-bar>
+          <i class="fa fa-search"></i>
+          <i class="fa fa-location-dot"></i>
+        </div>
+
+        <div class="current-time-info">
+          <label class="day">Friday,</label>
+          <label class="date">12 May 2023</label>
+          <label>|</label>
+          <label>Local Time:</label>
+          <label>11:44 AM</label>
+        </div>
+
+      </div>
+
+      <div class="forecast-container">
+        
+        <div class="forecast-details">
+          <div class="location">
+            <label>Berlin, DE</label>
+          </div>
+  
+          <div class="status">
+            <label>Clear</label>
+          </div>
+
+          <div class="icon">
+            <i class="fa fa-sun"></i>
+          </div>
+
+          <div class="temp">
+            <label>21ºC</label>
+          </div>
+
+          <div class="extra-info">
+            <div class="info-item">
+              <i class="fa fa-themomiter"></i>
+              <label>Feels Like: 20ºC</label>
+            </div>
+
+            <div class="info-item">
+              <i class="fa fa-drop"></i>
+              <label>humidity: 36%</label>
+            </div>
+
+            <div class="info-item">
+              <i class="fa fa-wind"></i>
+              <label>Wind: 9km/h</label>
+            </div>
+          </div>
+
+          <div class="temp-sub">
+            <div class="item">
+              <i class="fa fa-sun"></i>
+              <label>High: 23ºC</label>
+            </div>
+
+            <div class="item">
+              <i class="fa fa-sun"></i>
+              <label>Low: 19ºC</label>
+            </div>
+          </div>
+          
+        </div>
+
+
+      </div>
+
+      <div class="hourly-daily">
+        <div class="hourly">
+          <label>Hourly Forecast</label>
+          <!-- this will have to loop -->
+          <div class="summaries">
+            <label>12:00PM</label>
+            <i class="fa fa-sun"></i>
+            <label>21ºC</label>
+          </div>
+        </div>
+
+        <div class="daily">
+          <label>Daily Forecast</label>
+          <!-- this will have to loop -->
+          <div class="summaries">
+            <label>Sat</label>
+            <i class="fa fa-cloud"></i>
+            <label>21ºC</label>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    
     <script type="module" src="/main.js"></script>
   </body>
 </html>
