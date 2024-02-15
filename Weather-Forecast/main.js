@@ -1,4 +1,4 @@
-import { populateData } from "./api.js";
+import { populateDataDaily, populateDataHourly } from "./api.js";
 import "./index.scss";
 
 function init() {
@@ -9,20 +9,23 @@ function init() {
   }
 }
 
+var geocoder = new google.maps.Geocoder();
+var address = "Pretoria";
+
+geocoder.geocode({ address: address }, function (results, status) {
+  if (status == google.maps.GeocoderStatus.OK) {
+    var latitude = results[0].geometry.location.lat();
+    var longitude = results[0].geometry.location.lng();
+  }
+});
+
 function showPosition(position) {
-  console.log(position.coords.latitude);
-  console.log(position.coords.longitude);
-
-  let lat = position.coords.latitude;
-  let lon = position.coords.longitude;
-
-  populateData(lat, lon);
+  populateDataHourly(position.coords.latitude, position.coords.longitude);
+  populateDataDaily(position.coords.latitude, position.coords.longitude);
 }
 
 function search() {}
 
 function submit() {}
-
-// function populateData(lat, lon) {}
 
 init();
