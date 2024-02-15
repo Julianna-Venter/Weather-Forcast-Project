@@ -7,6 +7,43 @@ function init() {
   } else {
     throw new Error("Geolocation is not supported by this browser.");
   }
+
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+
+  let currentdate = new Date();
+  const day = document.getElementById("day");
+  day.innerText = days[currentdate.getDay()] + ",";
+  const date = document.getElementById("date");
+  date.innerText =
+    currentdate.getDate() +
+    " " +
+    months[currentdate.getMonth()] +
+    " " +
+    currentdate.getFullYear();
+  const time = document.getElementById("time");
+  time.innerText = currentdate.getHours() + ":" + currentdate.getMinutes();
 }
 
 var geocoder = new google.maps.Geocoder();
