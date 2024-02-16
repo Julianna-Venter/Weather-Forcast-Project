@@ -3,7 +3,7 @@
 body,
 html {
     height: 100%;
-    width: 100%;
+    width: 100vw;
     margin: 0;
 }
 
@@ -12,16 +12,19 @@ button {
 }
 
 .container {
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    position: absolute;
+    // height: 100%;
+    // width: 100%;
+    // margin: 0;
+    // position: absolute;
     font-family: "Poppins", sans-serif;
     font-weight: 100;
     font-style: normal;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    gap: 50px;
+    width: 100%;
 }
 
 .navigation-container {
@@ -42,12 +45,17 @@ button {
 
 @media only screen and (max-width: 1200px) {
 
+    .your-location {
+        font-size: 0.7em;
+        // width: 80%;
+    }
+
     .container {
         background-image: linear-gradient(130deg, hsl(34.84deg 91.72% 33.14%), hsl(18.88deg 87.25% 40%));
     }
 
     .grid-container {
-        width: 100%;
+        width: 90%;
         max-width: 800px;
         display: grid;
         grid-template-areas:
@@ -87,13 +95,18 @@ button {
     .hourly,
     .daily {
         color: white;
+        margin: 10px 20px;
 
         span {
             border-bottom: solid 1px white;
         }
 
         .summaries {
+            justify-content: space-around;
+            // gap: 20px;
+            
             .item {
+                min-width: 50px;
 
                 i {
                     font-size: 1.2rem;
@@ -106,8 +119,8 @@ button {
         }
     }
 
-    .hourly {
-        margin: 10px 20px;
+    .hourly{
+        flex-wrap: wrap;
     }
 
     .icon {
@@ -156,19 +169,29 @@ button {
         border: none;
         border-radius: 2px;
     }
+
+    #map {
+        width: 90%;
+    }
 }
 
 
 @media only screen and (min-width: 1200px) {
 
+    .your-location {
+        font-size: 0.4em;
+    }
+
     .container {
         background-color: white;
         color: #333;
+        padding-top: 20px;
     }
 
     .grid-container {
-        height: 97%;
+        height: 100%;
         width: 90%;
+        max-width: 1300px;
         display: grid;
         grid-template-areas:
             'fore-con nav-con'
@@ -176,6 +199,11 @@ button {
             'daily hourly';
         grid-template-rows: 1fr 1fr 1fr;
         grid-template-columns: 2fr 1fr;
+    }
+
+    #map {
+        max-width: 1300px;
+        width: 90%;
     }
 
     .navigation-container {
@@ -188,6 +216,7 @@ button {
         padding-right: 5px;
         display: flex;
         flex-direction: column;
+        margin-left: 30px;
 
         .current-time-info {
             margin-top: 8%;
@@ -232,11 +261,14 @@ button {
         color: #333;
 
         .summaries {
+            
             .item {
                 border: 1px solid #9c999990;
-                padding: 15px 10px;
+                padding: 10px;
                 border-radius: 10px;
-                min-width: 80px;
+                min-width: 70px;
+                
+                // max-height: 80px;
 
                 i {
                     font-size: 1.5rem;
@@ -258,11 +290,23 @@ button {
         background-color: #9c999923;
         border-bottom-left-radius: 20px;
         border-bottom-right-radius: 20px;
+        padding: 15px 20px 0 20px;
+        margin-left: 30px;
+        height: 100%;
 
         span {
             // border-bottom: solid 1px #333;
             font-size: 1.2rem;
         }
+    }
+
+    .hourly .summaries {
+        justify-content: space-around;
+    }
+
+
+    .daily .summaries {
+        justify-content: space-between;
     }
 
     .daily span {
@@ -298,11 +342,15 @@ button {
     }
 
     .location {
+        margin-top: 30px;
         font-size: 2.5rem;
+        align-self: flex-start;
     }
 
     .status {
+        margin-top: 30px;
         font-size: 2.2rem;
+        align-self: flex-start;
     }
 
     .forecast-container {
@@ -373,6 +421,10 @@ button {
 .location {
     grid-area: location;
     font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     // font-size: 1.5rem;
 }
 
@@ -452,7 +504,6 @@ button {
 
     .summaries {
         display: flex;
-        justify-content: space-around;
 
         .item {
             display: flex;
@@ -465,4 +516,27 @@ button {
             font-weight: 400;
         }
     }
+}
+
+.your-location {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    opacity: 0.85;
+
+    i {
+        font-size: 1.3em;
+    }
+}
+
+.hourlySummaries {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 23px;
+}
+
+#map { 
+    height: 500px; 
+    border-radius: 20px;
+    margin-bottom: 50px;
 }
