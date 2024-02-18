@@ -49,8 +49,13 @@ export function getLocalTimeAndDate(latitude, longitude) {
         months[localTimeDate.getMonth()] +
         " " +
         localTimeDate.getFullYear();
-      time.innerText =
-        localTimeDate.getHours() + ":" + localTimeDate.getMinutes();
+
+      const addZero = (number) => (number < 10 ? "0" + number : number);
+
+      const hours = addZero(localTimeDate.getHours());
+      const minutes = addZero(localTimeDate.getMinutes());
+
+      time.innerText = hours + ":" + minutes;
     })
     .catch((error) => {
       console.error("Error fetching timezone information:", error);

@@ -1,7 +1,11 @@
-export function populateDataHourly(lat, lon) {
+const display = document.getElementById("display-container");
+const load_display = document.getElementById("load-container");
+
+function populateDataHourly(lat, lon) {
   const summaries = document.getElementById("summaries_hourly");
   summaries.innerHTML = "";
-  fetch(
+  let hourlytext = "";
+  const hourlyPromise = fetch(
     `http://www.7timer.info/bin/api.pl?lon=${lon}&lat=${lat}&product=astro&output=json`
   )
     .then((response) => response.json())
@@ -84,15 +88,18 @@ export function populateDataHourly(lat, lon) {
           hourlyTemp += `${item.temp2m}ºC`;
         }
 
-        summaries.innerHTML += `<div class='item'> <label>${timeOfDay}</label>${hourlyWeatherIcon}<label class='special'>${hourlyTemp}</label> </div>`;
+        hourlytext += `<div class='item'> <label>${timeOfDay}</label>${hourlyWeatherIcon}<label class='special'>${hourlyTemp}</label> </div>`;
 
         if (i > 10) {
           break;
         }
       }
+
+      summaries.innerHTML = hourlytext;
     })
-    .catch((error) => console.error(error))
-    .finally(() => console.log("The network call has been finalised"));
+    .catch((error) => console.error(error));
+
+  return hourlyPromise;
 }
 
 const weatherMappings = {
@@ -127,9 +134,11 @@ const weatherIcons = {
   rainsnow: "<i class='fa-solid fa-cloud-showers-water'></i>",
 };
 
-export function populateDataDaily(lat, lon) {
-  summaries.innerHTML = "";
-  fetch(
+function populateDataDaily(lat, lon) {
+  const summariesD = document.getElementById("summaries");
+  summariesD.innerHTML = "";
+  let dailytext = "";
+  const dailyPromise = fetch(
     `http://www.7timer.info/bin/api.pl?lon=${lon}&lat=${lat}&product=civillight&output=json`
   )
     .then((response) => response.json())
@@ -137,11 +146,8 @@ export function populateDataDaily(lat, lon) {
       if (!jsonresponse?.dataseries) {
         throw new Error("Test catch?");
       }
-
       const results = jsonresponse.dataseries;
-      console.log(results);
       let result = results[0];
-
       if (result) {
         let min = "";
         let max = "";
@@ -153,13 +159,11 @@ export function populateDataDaily(lat, lon) {
           const max_display = document.getElementById("high");
           max_display.innerText = max;
         }
-
         if (result?.weather) {
           const shorthandCode = result.weather.toLowerCase();
           const fullWeather = weatherMappings[shorthandCode] || result.weather;
           const fullWeatherIcon =
             weatherIcons[shorthandCode] || "<i class='fa-solid fa-circle'></i>";
-
           const weather_display = document.getElementById("status");
           const weather_icon = document.getElementById("icon");
           weather_display.innerText = fullWeather;
@@ -167,44 +171,45 @@ export function populateDataDaily(lat, lon) {
         }
       }
 
-      const summaries = document.getElementById("summaries");
-
       for (let i = 1; i < results.length; i++) {
         const item = results[i];
-
         let dayOfWeek = "";
         let fullWeatherIcon = "";
         let max = "";
-
         if (item?.date) {
           const dateString = `${item.date}`;
-
           const year = parseInt(dateString.substr(0, 4), 10);
           const month = parseInt(dateString.substr(4, 2), 10) - 1;
           const day = parseInt(dateString.substr(6, 2), 10);
-
           const dateObject = new Date(year, month, day);
-
           const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
           dayOfWeek = days[dateObject.getDay()];
         }
-
         if (item?.weather) {
           const shorthandCode = item.weather.toLowerCase();
           fullWeatherIcon =
             weatherIcons[shorthandCode] || "<i class='fa-solid fa-circle'></i>";
         }
-
         if (item?.temp2m?.max) {
           max += `${item.temp2m.max}ºC`;
         } else {
           max += "0ºC";
         }
-
-        summaries.innerHTML += `<div class='item'> <label>${dayOfWeek}</label>${fullWeatherIcon}<label class='special'>${max}</label> </div>`;
+        dailytext += `<div class='item'> <label>${dayOfWeek}</label>${fullWeatherIcon}<label class='special'>${max}</label> </div>`;
       }
+
+      summariesD.innerHTML = dailytext;
     })
-    .catch((error) => console.error(error))
-    .finally(() => console.log("The network call has been finalised"));
+    .catch((error) => console.error(error));
+
+  return dailyPromise;
+}
+
+export function main(lat, lon) {
+  Promise.all([populateDataHourly(lat, lon), populateDataDaily(lat, lon)])
+    .then(() => {
+      load_display.style.display = "none";
+      display.style.display = "flex";
+    })
+    .catch((error) => console.error(error));
 }

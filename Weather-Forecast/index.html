@@ -35,7 +35,39 @@
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIAQv0sNyWV3OfQF5EiZI8eDpl1W5QjBo&callback=console.debug&libraries=maps,marker&v=beta"
     ></script>
 
-    <div class="container">
+    <div class="load-container" id="load-container">
+      <div class="grid-container-load">
+        <div class="forecast-con-load">
+          <div class="top-bar">
+            <div class="title-bar movie--isloading">
+              <div class="loading-image"></div>
+            </div>
+
+            <div class="status-bar movie--isloading">
+              <div class="loading-image"></div>
+            </div>
+          </div>
+
+          <div class="weather-bar movie--isloading">
+            <div class="loading-image"></div>
+          </div>
+        </div>
+
+        <div class="bottom-bar movie--isloading">
+          <div class="loading-image"></div>
+        </div>
+
+        <div class="side-bar movie--isloading">
+          <div class="loading-image"></div>
+        </div>
+      </div>
+
+      <div class="map-bar movie--isloading">
+        <div class="loading-image"></div>
+      </div>
+    </div>
+
+    <div class="container" id="display-container">
       <div class="grid-container">
         <div class="navigation-container">
           <nav class="timezones">

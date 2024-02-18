@@ -11,5 +11,8 @@
   "devDependencies": {
     "sass": "^1.70.0",
     "vite": "^5.1.0"
+  },
+  "dependencies": {
+    "webkit": "^0.0.0"
   }
 }

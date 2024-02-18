@@ -11,11 +11,7 @@ button {
     cursor: pointer;
 }
 
-.container {
-    // height: 100%;
-    // width: 100%;
-    // margin: 0;
-    // position: absolute;
+.container, .load-container {
     font-family: "Poppins", sans-serif;
     font-weight: 100;
     font-style: normal;
@@ -23,34 +19,116 @@ button {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    gap: 50px;
     width: 100%;
 }
 
-.navigation-container {
+.navigation-container{
     grid-area: nav-con;
 }
 
-.forecast-container {
+.forecast-container{
     grid-area: fore-con;
 }
 
-.hourly {
+.hourly{
     grid-area: hourly;
 }
 
-.daily {
-    grid-area: daily;
+.daily{
+    grid-area: daily; 
 }
 
+.forecast-con-load {
+    grid-area: fore-load;
+}
+
+.side-bar {
+    grid-area: side-load;
+}
+
+.bottom-bar {
+    grid-area: bottom-load;
+}
+
+
 @media only screen and (max-width: 1200px) {
+
+    .container {
+        display: none;
+        gap: 50px;
+    }
+
+    .load-container {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        height: 170%;
+    }
+
+    .grid-container-load {
+        height: 100%;
+        width: 90%;
+        max-width: 1300px;
+        display: grid;
+        grid-template-areas:
+            'fore-load'
+            'side-load'
+            'bottom-load';
+        grid-template-rows: auto auto auto;
+    }
+
+    .top-bar {
+        display: flex;
+        gap: 20px;
+    }
+
+    .movie--isloading {
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 15px;
+        border-radius: 20px;
+    }
+
+    .title-bar {
+        height: 6rem;
+        width: 100%;
+    }
+
+    .status-bar {
+        display: none;
+    }
+
+    .weather-bar {
+        height: 640px;
+        width: 100%;
+    }
+
+    .side-bar {
+        height: 150px;
+        width: 100%;
+        justify-self: flex-end;
+    }
+
+    .bottom-bar {
+        height: 150px;
+        width: 100%;
+    }
+
+    .map-bar {
+        height: 500px;
+        width: 90%;
+        max-width: 1300px;
+    }
+
+    .your-location {
+        font-size: 0.4em;
+    }
 
     .your-location {
         font-size: 0.7em;
         // width: 80%;
     }
 
-    .container {
+    .container, .load-container {
         background-image: linear-gradient(130deg, hsl(34.84deg 91.72% 33.14%), hsl(18.88deg 87.25% 40%));
     }
 
@@ -145,7 +223,7 @@ button {
 
     .status {
         font-size: 1.2rem;
-    }
+        }
 
     .forecast-container {
         display: grid;
@@ -178,6 +256,70 @@ button {
 
 @media only screen and (min-width: 1200px) {
 
+    .load-container {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        height: 135%;
+        gap: 50px;
+    }
+
+    .grid-container-load {
+        height: 100%;
+        width: 90%;
+        max-width: 1300px;
+        display: grid;
+        grid-template-areas:
+            'fore-load side-load'
+            'fore-load side-load'
+            'bottom-load side-load';
+        grid-template-rows: auto auto auto;
+        grid-template-columns: 2fr 1fr;
+    }
+
+    .top-bar {
+        display: flex;
+        gap: 20px;
+    }
+
+    .movie--isloading {
+        border-radius: 4px;
+        overflow: hidden;
+        margin-bottom: 15px;
+        border-radius: 20px;
+    }
+
+    .title-bar {
+        height: 4rem;
+        width: 65%;
+
+    }
+
+    .status-bar {
+        height: 4rem;
+        width: 40%;
+    }
+
+    .weather-bar {
+        height: 640px;
+        width: 100%;
+    }
+
+    .side-bar {
+        height: 98%;
+        width: 95%;
+        justify-self: flex-end;
+    }
+
+    .bottom-bar {
+        height: 150px;
+        width: 100%;
+    }
+
+    .map-bar {
+        height: 500px;
+        width: 90%;
+    }
+
     .your-location {
         font-size: 0.4em;
     }
@@ -186,6 +328,8 @@ button {
         background-color: white;
         color: #333;
         padding-top: 20px;
+        display: none;
+        gap: 50px;
     }
 
     .grid-container {
@@ -216,7 +360,10 @@ button {
         padding-right: 5px;
         display: flex;
         flex-direction: column;
+        justify-content: space-around;
         margin-left: 30px;
+        padding-bottom: 20px;
+        max-height: 320px;
 
         .current-time-info {
             margin-top: 8%;
@@ -290,9 +437,10 @@ button {
         background-color: #9c999923;
         border-bottom-left-radius: 20px;
         border-bottom-right-radius: 20px;
-        padding: 15px 20px 0 20px;
+        padding: 0px 20px 0 20px;
         margin-left: 30px;
-        height: 100%;
+        min-height: 623px;
+        height: 200px;
 
         span {
             // border-bottom: solid 1px #333;
@@ -312,6 +460,10 @@ button {
     .daily span {
         // border-bottom: solid 1px #333;
         font-size: 1.4rem;
+    }
+
+    .daily {
+        padding-top: 30px;
     }
 
 
@@ -355,7 +507,7 @@ button {
 
     .forecast-container {
         display: grid;
-        row-gap: 20px;
+        row-gap: 30px;
         justify-items: center;
         align-items: center;
         grid-template-areas:
@@ -540,3 +692,51 @@ button {
     border-radius: 20px;
     margin-bottom: 50px;
 }
+
+.movie--isloading .loading-image {
+    height: 100%;
+    border-radius: 20px;
+    background-image: -webkit-linear-gradient(left, #ececec 0px, #f4f4f4 40px, #ececec 80px);
+    background-image: -o-linear-gradient(left, #ececec 0px, #f4f4f4 40px, #ececec 80px);
+    background-image: linear-gradient(90deg, #ececec 0px, #f4f4f4 40px, #ececec 80px);
+    background-size: 250px;
+    -webkit-animation: shine-loading-image 2s infinite ease-out;
+            animation: shine-loading-image 2s infinite ease-out;
+  }
+  
+  @-webkit-keyframes shine-loading-image {
+    0% {
+      background-position: -32px;
+    }
+    40%, 100% {
+      background-position: 208px;
+    }
+  }
+  
+  
+  @keyframes shine-loading-image {
+    0% {
+      background-position: -32px;
+    }
+    40%, 100% {
+      background-position: 208px;
+    }
+  }
+  
+  @-webkit-keyframes shine-loading-container-items {
+    0% {
+      background-position: -100px;
+    }
+    40%, 100% {
+      background-position: 140px;
+    }
+  }
+  
+  @keyframes shine-loading-container-items {
+    0% {
+      background-position: -100px;
+    }
+    40%, 100% {
+      background-position: 140px;
+    }
+  }

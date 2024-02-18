@@ -1,10 +1,12 @@
-import { populateDataDaily, populateDataHourly } from "./api.js";
+import { main } from "./api.js";
 import { getLocalTimeAndDate } from "./geocoding.js";
 import "./index.scss";
 
 const subtitle = document.getElementById("subtitle");
 const your_loc = document.getElementById("your-loc");
 var map = "";
+const display = document.getElementById("display-container");
+const load_display = document.getElementById("load-container");
 
 function init() {
   if (navigator.geolocation) {
@@ -48,13 +50,18 @@ function init() {
     " " +
     currentdate.getFullYear();
   const time = document.getElementById("time");
-  time.innerText = currentdate.getHours() + ":" + currentdate.getMinutes();
+
+  const addZero = (number) => (number < 10 ? "0" + number : number);
+
+  const hours = addZero(currentdate.getHours());
+  const minutes = addZero(currentdate.getMinutes());
+
+  time.innerText = hours + ":" + minutes;
 }
 
 function showPosition(position) {
   var geocoder = new google.maps.Geocoder();
-  populateDataHourly(position.coords.latitude, position.coords.longitude);
-  populateDataDaily(position.coords.latitude, position.coords.longitude);
+  main(position.coords.latitude, position.coords.longitude);
 
   setMap(position.coords.latitude, position.coords.longitude);
 
@@ -66,7 +73,6 @@ function showPosition(position) {
     if (status == google.maps.GeocoderStatus.OK) {
       if (results[0]) {
         var reversedAddress = results[0].formatted_address;
-        // console.log("Reversed Address:", reversedAddress);
         your_loc.style.transition = "opacity 0.1s ease";
         your_loc.style.opacity = "1";
         subtitle.style.opacity = "0.7";
@@ -98,24 +104,16 @@ function setMap(lat, lon) {
 function onMapClick(e) {
   const latitude = e.latlng.lat;
   const longitude = e.latlng.lng;
-
-  populateDataHourly(latitude, longitude);
-  populateDataDaily(latitude, longitude);
+  main(latitude, longitude);
   getLocalTimeAndDate(latitude, longitude);
   setMap(latitude, longitude);
 
   var latLng = new google.maps.LatLng(latitude, longitude);
-
-  // Initialize the geocoder
   var geocoder = new google.maps.Geocoder();
-
-  // Perform reverse geocoding
   geocoder.geocode({ location: latLng }, function (results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
       if (results[0]) {
         var reversedAddress = results[0].formatted_address;
-
-        console.log("Reversed Address:", reversedAddress);
         your_loc.style.transition = "opacity 0.1s ease";
         your_loc.style.opacity = "1";
         subtitle.style.opacity = "0.7";
@@ -128,6 +126,9 @@ function onMapClick(e) {
       console.error("Geocoder failed due to: " + status);
     }
   });
+
+  display.style.display = "none";
+  load_display.style.display = "flex";
 }
 
 document.querySelectorAll("button#loc_btn").forEach(function (button) {
@@ -140,6 +141,8 @@ document.querySelectorAll("button#loc_btn").forEach(function (button) {
     } else {
       init();
     }
+    display.style.display = "none";
+    load_display.style.display = "flex";
   });
 });
 
@@ -150,11 +153,9 @@ function handleSearch(address) {
     if (status == google.maps.GeocoderStatus.OK) {
       var latitude = results[0].geometry.location.lat();
       var longitude = results[0].geometry.location.lng();
-      populateDataHourly(latitude, longitude);
-      populateDataDaily(latitude, longitude);
+      main(latitude, longitude);
       getLocalTimeAndDate(latitude, longitude);
       setMap(latitude, longitude);
-      //   console.log("Setting map..");
     } else {
       console.error(
         "Geocode was not successful for the following reason: " + status
@@ -176,6 +177,8 @@ document.querySelectorAll("button#searchBtn").forEach(function (button) {
     title.innerText = "Custom";
     subtitle.innerText = capitalizedString;
     handleSearch(inputValue);
+    display.style.display = "none";
+    load_display.style.display = "flex";
   });
 });
 
