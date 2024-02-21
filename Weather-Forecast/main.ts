@@ -1,12 +1,17 @@
-import { main } from "./api.js";
-import { getLocalTimeAndDate } from "./geocoding.js";
+/// <reference types="@types/googlemaps" />
+/// <reference types="leaflet" />
+
+import L from "leaflet";
+import { main } from "./api.ts";
+import { getLocalTimeAndDate } from "./geocoding.ts";
 import "./index.scss";
 
-const subtitle = document.getElementById("subtitle");
-const your_loc = document.getElementById("your-loc");
-var map = "";
-const display = document.getElementById("display-container");
-const load_display = document.getElementById("load-container");
+const title = document.getElementById("title") as HTMLInputElement;
+const subtitle = document.getElementById("subtitle") as HTMLInputElement;
+const your_loc = document.getElementById("your-loc")as HTMLInputElement;
+let map: L.Map | undefined;
+const display = document.getElementById("display-container") as HTMLInputElement;
+const load_display = document.getElementById("load-container")as HTMLInputElement;
 
 function init() {
   if (navigator.geolocation) {
@@ -40,39 +45,41 @@ function init() {
   ];
 
   let currentdate = new Date();
-  const day = document.getElementById("day");
+  const day = document.getElementById("day") as HTMLInputElement;
+  const date = document.getElementById("date") as HTMLInputElement;
+  const time = document.getElementById("time") as HTMLInputElement;
+  const addZero = (number) => (number < 10 ? "0" + number : number);
+  const hours = addZero(currentdate.getHours());
+  const minutes = addZero(currentdate.getMinutes());
+
+  if (!day || !date || !time || !hours || !minutes){
+    return;
+  }
+
   day.innerText = days[currentdate.getDay()] + ",";
-  const date = document.getElementById("date");
   date.innerText =
     currentdate.getDate() +
     " " +
     months[currentdate.getMonth()] +
     " " +
     currentdate.getFullYear();
-  const time = document.getElementById("time");
-
-  const addZero = (number) => (number < 10 ? "0" + number : number);
-
-  const hours = addZero(currentdate.getHours());
-  const minutes = addZero(currentdate.getMinutes());
-
   time.innerText = hours + ":" + minutes;
 }
 
 function showPosition(position) {
-  var geocoder = new google.maps.Geocoder();
+  let geocoder = new google.maps.Geocoder();
   main(position.coords.latitude, position.coords.longitude);
 
   setMap(position.coords.latitude, position.coords.longitude);
 
-  var latLng = new google.maps.LatLng(
+  let latLng = new google.maps.LatLng(
     position.coords.latitude,
     position.coords.longitude
   );
   geocoder.geocode({ location: latLng }, function (results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
-      if (results[0]) {
-        var reversedAddress = results[0].formatted_address;
+      if (results[0] && your_loc && subtitle) {
+        let reversedAddress = results[0].formatted_address;
         your_loc.style.transition = "opacity 0.1s ease";
         your_loc.style.opacity = "1";
         subtitle.style.opacity = "0.7";
@@ -91,7 +98,7 @@ function setMap(lat, lon) {
     map.remove();
   }
   map = L.map("map").setView([lat, lon], 13);
-  var marker = L.marker([lat, lon]).addTo(map);
+  let marker = L.marker([lat, lon]).addTo(map);
 
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
@@ -108,12 +115,12 @@ function onMapClick(e) {
   getLocalTimeAndDate(latitude, longitude);
   setMap(latitude, longitude);
 
-  var latLng = new google.maps.LatLng(latitude, longitude);
-  var geocoder = new google.maps.Geocoder();
+  let latLng = new google.maps.LatLng(latitude, longitude);
+  let geocoder = new google.maps.Geocoder();
   geocoder.geocode({ location: latLng }, function (results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
-      if (results[0]) {
-        var reversedAddress = results[0].formatted_address;
+      if (results[0] && your_loc && subtitle) {
+        let reversedAddress = results[0].formatted_address;
         your_loc.style.transition = "opacity 0.1s ease";
         your_loc.style.opacity = "1";
         subtitle.style.opacity = "0.7";
@@ -127,14 +134,21 @@ function onMapClick(e) {
     }
   });
 
+  if (!display || !load_display){
+    return;
+  }
+
   display.style.display = "none";
   load_display.style.display = "flex";
 }
 
 document.querySelectorAll("button#loc_btn").forEach(function (button) {
   button.addEventListener("click", function (event) {
-    var buttonValue = event.target.textContent;
-    title.innerText = buttonValue;
+    if (!event.target || !your_loc || !display || !load_display){
+      return;
+    }
+    let buttonValue = (event.target as HTMLElement).textContent;
+    title.innerText = buttonValue !== null ? buttonValue : "";
     your_loc.style.opacity = "0";
     if (buttonValue !== "Home") {
       handleSearch(buttonValue);
@@ -147,12 +161,12 @@ document.querySelectorAll("button#loc_btn").forEach(function (button) {
 });
 
 function handleSearch(address) {
-  var geocoder = new google.maps.Geocoder();
+  let geocoder = new google.maps.Geocoder();
 
   geocoder.geocode({ address: address }, function (results, status) {
     if (status == google.maps.GeocoderStatus.OK) {
-      var latitude = results[0].geometry.location.lat();
-      var longitude = results[0].geometry.location.lng();
+      let latitude = results[0].geometry.location.lat();
+      let longitude = results[0].geometry.location.lng();
       main(latitude, longitude);
       getLocalTimeAndDate(latitude, longitude);
       setMap(latitude, longitude);
@@ -166,7 +180,10 @@ function handleSearch(address) {
 
 document.querySelectorAll("button#searchBtn").forEach(function (button) {
   button.addEventListener("click", function (event) {
-    const searchInput = document.getElementById("searchInput");
+    const searchInput = document.getElementById("searchInput") as HTMLInputElement;
+    if (!subtitle || !your_loc || !display || !load_display || !searchInput){
+      return;
+    }
     const inputValue = searchInput.value;
     const capitalizedString = inputValue.replace(/\b\w/g, (char) =>
       char.toUpperCase()

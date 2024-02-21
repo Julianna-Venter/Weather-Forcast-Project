@@ -41,6 +41,14 @@ export function getLocalTimeAndDate(latitude, longitude) {
       const day = document.getElementById("day");
       const date = document.getElementById("date");
       const time = document.getElementById("time");
+      const addZero = (number) => (number < 10 ? "0" + number : number);
+
+      const hours = addZero(localTimeDate.getHours());
+      const minutes = addZero(localTimeDate.getMinutes());
+
+      if (!day || !date || !time || !hours || !minutes){
+        return;
+      }
 
       day.innerText = days[localTimeDate.getDay()] + ",";
       date.innerText =
@@ -50,10 +58,6 @@ export function getLocalTimeAndDate(latitude, longitude) {
         " " +
         localTimeDate.getFullYear();
 
-      const addZero = (number) => (number < 10 ? "0" + number : number);
-
-      const hours = addZero(localTimeDate.getHours());
-      const minutes = addZero(localTimeDate.getMinutes());
 
       time.innerText = hours + ":" + minutes;
     })

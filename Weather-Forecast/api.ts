@@ -3,6 +3,9 @@ const load_display = document.getElementById("load-container");
 
 function populateDataHourly(lat, lon) {
   const summaries = document.getElementById("summaries_hourly");
+  if (!summaries){
+    return;
+  }
   summaries.innerHTML = "";
   let hourlytext = "";
   const hourlyPromise = fetch(
@@ -22,28 +25,39 @@ function populateDataHourly(lat, lon) {
         if (result?.wind10m?.direction && result?.wind10m?.speed) {
           wind += `${result.wind10m.speed}km/h ${result.wind10m.direction}`;
           const wind_display = document.getElementById("wind");
-          wind_display.innerText = wind;
+          if (wind_display){
+
+            wind_display.innerText = wind;
+          }
         }
 
         let humidity = "";
         if (result?.rh2m) {
           humidity += `${result.rh2m}%`;
           const humid = document.getElementById("humidity");
+          if (humid){
           humid.innerText = humidity;
+          }
         }
 
         let temp = "";
         if (result?.temp2m) {
           temp += `${result.temp2m}ºC`;
           const curr_temp = document.getElementById("curr_temp");
+          if (curr_temp){
+
           curr_temp.innerText = temp;
+          }
         }
 
         let precip = "";
         if (result?.temp2m) {
           precip += `${result.prec_type}`;
           const curr_precip = document.getElementById("precip");
+          if (curr_precip){
+
           curr_precip.innerText = precip;
+          }
         }
       }
 
@@ -136,6 +150,9 @@ const weatherIcons = {
 
 function populateDataDaily(lat, lon) {
   const summariesD = document.getElementById("summaries");
+  if (!summariesD) {
+    return;
+  }
   summariesD.innerHTML = "";
   let dailytext = "";
   const dailyPromise = fetch(
@@ -155,8 +172,11 @@ function populateDataDaily(lat, lon) {
           min += `${result.temp2m.min}ºC`;
           max += `${result.temp2m.max}ºC`;
           const min_display = document.getElementById("low");
-          min_display.innerText = min;
           const max_display = document.getElementById("high");
+          if (!min_display || !max_display) {
+            return;
+          }
+          min_display.innerText = min;
           max_display.innerText = max;
         }
         if (result?.weather) {
@@ -166,6 +186,9 @@ function populateDataDaily(lat, lon) {
             weatherIcons[shorthandCode] || "<i class='fa-solid fa-circle'></i>";
           const weather_display = document.getElementById("status");
           const weather_icon = document.getElementById("icon");
+          if (!weather_display || !weather_icon) {
+            return;
+          }
           weather_display.innerText = fullWeather;
           weather_icon.innerHTML = fullWeatherIcon;
         }
@@ -208,6 +231,9 @@ function populateDataDaily(lat, lon) {
 export function main(lat, lon) {
   Promise.all([populateDataHourly(lat, lon), populateDataDaily(lat, lon)])
     .then(() => {
+      if (!display || !load_display){
+        return;
+      }
       load_display.style.display = "none";
       display.style.display = "flex";
     })
