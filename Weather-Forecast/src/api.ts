@@ -45,9 +45,10 @@ function populateDataHourly(lat: number, lon: number) {
           temp += `${result.temp2m}ºC`;
           const curr_temp = document.getElementById("curr_temp");
           if (curr_temp){
-
           curr_temp.innerText = temp;
           }
+        }else {
+          temp+= "0ºC";
         }
 
         let precip = "";
@@ -178,6 +179,10 @@ function populateDataDaily(lat: number, lon: number) {
           }
           min_display.innerText = min;
           max_display.innerText = max;
+        } else if (!result?.temp2m?.min) {
+          min += "0ºC";
+        } else {
+          max += "0ºC";
         }
         if (result?.weather) {
           const shorthandCode = result.weather.toLowerCase();
