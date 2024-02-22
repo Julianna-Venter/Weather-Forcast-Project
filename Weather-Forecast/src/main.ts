@@ -3,8 +3,8 @@
 
 import L from "leaflet";
 import { main } from "./api.ts";
+import "../index.scss";
 import { getLocalTimeAndDate } from "./geocoding.ts";
-import "./index.scss";
 
 const title = document.getElementById("title") as HTMLInputElement;
 const subtitle = document.getElementById("subtitle") as HTMLInputElement;
@@ -19,54 +19,11 @@ function init() {
   } else {
     throw new Error("Geolocation is not supported by this browser.");
   }
-
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const days = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
-
-  let currentdate = new Date();
-  const day = document.getElementById("day") as HTMLInputElement;
-  const date = document.getElementById("date") as HTMLInputElement;
-  const time = document.getElementById("time") as HTMLInputElement;
-  const addZero = (number) => (number < 10 ? "0" + number : number);
-  const hours = addZero(currentdate.getHours());
-  const minutes = addZero(currentdate.getMinutes());
-
-  if (!day || !date || !time || !hours || !minutes){
-    return;
-  }
-
-  day.innerText = days[currentdate.getDay()] + ",";
-  date.innerText =
-    currentdate.getDate() +
-    " " +
-    months[currentdate.getMonth()] +
-    " " +
-    currentdate.getFullYear();
-  time.innerText = hours + ":" + minutes;
 }
 
-function showPosition(position) {
+function showPosition(position: any) {
+
+  getLocalTimeAndDate(position.coords.latitude, position.coords.longitude)
   let geocoder = new google.maps.Geocoder();
   main(position.coords.latitude, position.coords.longitude);
 
@@ -93,22 +50,23 @@ function showPosition(position) {
   });
 }
 
-function setMap(lat, lon) {
+function setMap(lat: number, lon: number) {
   if (map) {
     map.remove();
   }
   map = L.map("map").setView([lat, lon], 13);
   let marker = L.marker([lat, lon]).addTo(map);
-
+  
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
     attribution:
-      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   }).addTo(map);
+  map.invalidateSize(); 
   map.on("click", onMapClick);
 }
 
-function onMapClick(e) {
+function onMapClick(e: { latlng: { lat: number; lng: number; }; }) {
   const latitude = e.latlng.lat;
   const longitude = e.latlng.lng;
   main(latitude, longitude);
@@ -160,7 +118,7 @@ document.querySelectorAll("button#loc_btn").forEach(function (button) {
   });
 });
 
-function handleSearch(address) {
+function handleSearch(address: any) {
   let geocoder = new google.maps.Geocoder();
 
   geocoder.geocode({ address: address }, function (results, status) {
