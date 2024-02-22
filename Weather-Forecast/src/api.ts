@@ -1,7 +1,7 @@
 const display = document.getElementById("display-container");
 const load_display = document.getElementById("load-container");
 
-function populateDataHourly(lat, lon) {
+function populateDataHourly(lat: number, lon: number) {
   const summaries = document.getElementById("summaries_hourly");
   if (!summaries){
     return;
@@ -116,7 +116,7 @@ function populateDataHourly(lat, lon) {
   return hourlyPromise;
 }
 
-const weatherMappings = {
+const weatherMappings: { [key: string]: string } = {
   ts: "Thunder Showers",
   pcloudy: "Partly Cloudy",
   mcloudy: "Mostly Cloudy",
@@ -132,7 +132,7 @@ const weatherMappings = {
   rainsnow: "Rain & Snow",
 };
 
-const weatherIcons = {
+const weatherIcons: { [key: string]: string } = {
   ts: "<i class='fa-solid fa-cloud-bolt'></i>",
   pcloudy: "<i class='fa-solid fa-cloud-sun'></i>",
   cloudy: "<i class='fa-solid fa-cloud'></i>",
@@ -148,7 +148,7 @@ const weatherIcons = {
   rainsnow: "<i class='fa-solid fa-cloud-showers-water'></i>",
 };
 
-function populateDataDaily(lat, lon) {
+function populateDataDaily(lat: number, lon: number) {
   const summariesD = document.getElementById("summaries");
   if (!summariesD) {
     return;
@@ -228,7 +228,7 @@ function populateDataDaily(lat, lon) {
   return dailyPromise;
 }
 
-export function main(lat, lon) {
+export function main(lat: number, lon: number) {
   Promise.all([populateDataHourly(lat, lon), populateDataDaily(lat, lon)])
     .then(() => {
       if (!display || !load_display){

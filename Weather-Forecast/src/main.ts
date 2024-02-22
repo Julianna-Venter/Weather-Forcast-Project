@@ -2,8 +2,8 @@
 /// <reference types="leaflet" />
 
 import L from "leaflet";
-import { main } from "./api.ts";
 import "../index.scss";
+import { main } from "./api.ts";
 import { getLocalTimeAndDate } from "./geocoding.ts";
 
 const title = document.getElementById("title") as HTMLInputElement;
